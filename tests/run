@@ -1,17 +1,26 @@
 #!/bin/bash
 set -u
 
-for i in {1..4}; do
-	echo "Test #$i"
+function test() {
+	local dataset="$1" ; shift
+	local suffix="$1" ; shift
+
+	local test_name="dataset=$dataset suffix=$suffix"
+	echo "Test: $test_name"
+
 	diff -u \
-		"results.$i" \
-		<(cat "numbers.$i" | ../shell-stats --list-format=rows \
-		  count min median max sum mean stddev 0% 1% 20% 25% 50% 66% 95% 99% 100% \
-		)
+		"results.$dataset.$suffix" \
+		<(cat "numbers.$dataset" | ../shell-stats "$@")
 	if [ "$?" -ne 0 ]; then
-		echo "Error: Tests failed for case #$i" >&2
+		echo "Error: Tests failed for case $test_name" >&2
 		exit 1
 	fi
+}
+
+# verify calculations
+for i in {1..4}; do
+	test "$i" 'rows.all' --list-format=rows \
+		count min median max sum mean stddev 0% 1% 20% 25% 50% 66% 95% 99% 100%
 done
 
 echo "All done."
