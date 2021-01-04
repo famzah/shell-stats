@@ -31,21 +31,23 @@ def parse_argv():
     parser.add_argument(
         '--num-format',
         default=def_fmt,
-        help='float number format; default: {}'.format(def_fmt))
+        help='float number format; default: "{}"'.format(def_fmt))
 
     def_fmt = 'single'
     parser.add_argument(
         '--list-format',
         default=def_fmt,
         choices=['single', 'rows'],
-        help='results display format; default: {}'.format(def_fmt))
+        help='results display format; default: "{}"'.format(def_fmt))
 
+    stats_opts_help = '{}, {}'.format(', '.join(stats_opts),
+                                      '0% to 100% for percentiles')
     parser.add_argument(
         'enabled_stats',
         action='append',
         nargs='*',
-        help='selection of statistics to show; default: "{}"'.format(
-            ' '.join(default_enabled_stats)))
+        help='selection of statistics to show; available options: "{}"'.format(
+            ', '.join(stats_opts)))
 
     args = parser.parse_args()
 
@@ -66,9 +68,8 @@ def parse_argv():
 
         if key not in stats_opts:
             parser.error(
-                '"{}" is not a valid statistics name. Choose from: {}, {}'.
-                format(key, ', '.join(stats_opts),
-                       '0% to 100% for percentiles'))
+                '"{}" is not a valid statistics name. Choose from: {}'.format(
+                    key, stats_opts_help))
 
     return args
 
