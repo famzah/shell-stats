@@ -19,10 +19,22 @@ stats_opts = {
 }
 
 
+def examples():
+    return '''examples:
+  cat data.txt | %(prog)s                            # use default options
+  cat data.txt | %(prog)s count min max 25%% 50%% 75%%  # add percentile stats
+  cat data.txt | %(prog)s --list-format json         # alternative output format
+'''
+
+
 def parse_argv():
     default_enabled_stats = ['count', 'min', 'median', 'max', 'stddev']
 
-    parser = argparse.ArgumentParser(description='Calculate statistics.')
+    parser = argparse.ArgumentParser(
+        description=
+        'Calculate statistics. Data is read from STDIN one value per line.',
+        epilog=examples(),
+        formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument('--no-headers',
                         action='store_true',
