@@ -15,7 +15,7 @@ stats_opts = {
     'max': np.amax,
     'sum': np.sum,
     'mean': np.mean,
-    'stddev': np.std,  # based on the entire population
+    'pstdev': np.std,  # based on the entire population
 }
 
 
@@ -28,7 +28,7 @@ def examples():
 
 
 def parse_argv():
-    default_enabled_stats = ['count', 'min', 'median', 'max', 'stddev']
+    default_enabled_stats = ['count', 'min', 'median', 'max', 'pstdev']
 
     parser = argparse.ArgumentParser(
         description=

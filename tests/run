@@ -20,21 +20,21 @@ function test() {
 # verify calculations
 for i in {1..4}; do
 	test "$i" 'rows.all' --list-format=rows \
-		count min median max sum mean stddev 0% 1% 20% 25% 50% 66% 95% 99% 100%
+		count min median max sum mean pstdev 0% 1% 20% 25% 50% 66% 95% 99% 100%
 done
 
 test 1 'rows.all.noheader' --list-format=rows --no-headers \
-	count min median max sum mean stddev 0% 1% 20% 25% 50% 66% 95% 99% 100%
+	count min median max sum mean pstdev 0% 1% 20% 25% 50% 66% 95% 99% 100%
 test 1 'rows.less' --list-format=rows \
-	count median max sum mean stddev 0% 1% 66% 95% 99% 100%
+	count median max sum mean pstdev 0% 1% 66% 95% 99% 100%
 
-test 4 'single.less' --list-format=single count min stddev 51%
-test 4 'single.less' count min stddev 51%
-test 4 'single.less.noheader' --no-headers count min stddev 51%
-test 4 'single.less.2f' --num-format '.2f' count min stddev 51%
-test 4 'json.less' --list-format=json count min stddev 51%
-test 4 'json.less' --list-format=json --num-format '.99f' count min stddev 51% # no effect
-test 4 'json.less' --list-format=json --no-headers count min stddev 51% # no effect
+test 4 'single.less' --list-format=single count min pstdev 51%
+test 4 'single.less' count min pstdev 51%
+test 4 'single.less.noheader' --no-headers count min pstdev 51%
+test 4 'single.less.2f' --num-format '.2f' count min pstdev 51%
+test 4 'json.less' --list-format=json count min pstdev 51%
+test 4 'json.less' --list-format=json --num-format '.99f' count min pstdev 51% # no effect
+test 4 'json.less' --list-format=json --no-headers count min pstdev 51% # no effect
 test 4 'default'
 
 echo 'All done.'
