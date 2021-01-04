@@ -3,6 +3,8 @@ Command-line statistics calculator.
 
 This tiny program complements tools like "awk", "sed", etc. which you use in a terminal console. Inspired by the "[st](https://github.com/nferraz/st)" project.
 
+Update: It turns out that GNU already has a great tool for this job named [datamash](https://www.gnu.org/software/datamash/). You should check it out first!
+
 # Installation
 
 You have to install the dependencies and then download the script:
