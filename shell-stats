@@ -48,7 +48,7 @@ def parse_argv():
         action='append',
         nargs='*',
         help='selection of statistics to show; available options: "{}"'.format(
-            ', '.join(stats_opts)))
+            stats_opts_help.replace('%', '%%')))
 
     args = parser.parse_args()
 
