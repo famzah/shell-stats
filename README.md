@@ -41,14 +41,14 @@ You can easily calculate "sum" and "count" using "awk" or "perl" one-liners. But
 `shell-stats` lets you calculate those statistics for a bunch of numbers which you supply via STDIN. Here is an example:
 ```bash
 # cat numbers.3 | shell-stats
-  count      min    median     max    stddev
+  count      min    median     max    pstdev
 -------  -------  --------  ------  --------
      20  -2112.1     446.1  2081.8    1387.1
 ```
 
 You can configure what statistics to be shown:
 ```bash
-# cat numbers.3 | shell-stats --list-format=rows count min median max sum mean stddev 0% 1% 20% 25% 50% 66% 95% 99% 100%
+# cat numbers.3 | shell-stats --list-format=rows count min median max sum mean pstdev 0% 1% 20% 25% 50% 66% 95% 99% 100%
 stats      value
 -------  -------
 count       20.0
@@ -57,7 +57,7 @@ median     446.1
 max       2081.8
 sum       1293.2
 mean        64.7
-stddev    1387.1
+pstdev    1387.1
 0%       -2112.1
 1%       -2085.7
 20%      -1618.0
