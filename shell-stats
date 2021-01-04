@@ -15,7 +15,7 @@ stats_opts = {
     'max': np.amax,
     'sum': np.sum,
     'mean': np.mean,
-    'stddev': np.std,
+    'stddev': np.std,  # based on the entire population
 }
 
 
@@ -41,8 +41,9 @@ def parse_argv():
         choices=['single', 'rows', 'json'],
         help='results display format; default: "{}"'.format(def_fmt))
 
-    stats_opts_help = '{}, {}'.format(', '.join(stats_opts),
-                                      '0% to 100% for percentiles')
+    stats_opts_help = '{}, {}'.format(
+        ', '.join(stats_opts),
+        '0% to 100% for percentiles')  # inclusive percentile range
     parser.add_argument(
         'enabled_stats',
         action='append',
