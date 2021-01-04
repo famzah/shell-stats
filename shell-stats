@@ -78,7 +78,14 @@ def parse_argv():
 def get_stdin_values():
     data = np.array([])
     for line in sys.stdin:
-        value = float(line.strip())
+        line = line.strip()
+
+        try:
+            value = float(line)
+        except ValueError as ex:
+            print('Error: ' + str(ex), file=sys.stderr)
+            sys.exit(1)
+
         data = np.append(data, value)
     return data
 
