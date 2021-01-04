@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 
 import numpy as np
+from tabulate import tabulate
+
 import sys
 import argparse
-from pprint import pprint
-from tabulate import tabulate
 import re
 import json
 
