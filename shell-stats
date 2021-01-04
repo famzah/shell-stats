@@ -6,6 +6,7 @@ import argparse
 from pprint import pprint
 from tabulate import tabulate
 import re
+import json
 
 stats_opts = {
     'count': len,
@@ -37,7 +38,7 @@ def parse_argv():
     parser.add_argument(
         '--list-format',
         default=def_fmt,
-        choices=['single', 'rows'],
+        choices=['single', 'rows', 'json'],
         help='results display format; default: "{}"'.format(def_fmt))
 
     stats_opts_help = '{}, {}'.format(', '.join(stats_opts),
@@ -83,12 +84,17 @@ def get_stdin_values():
 
 
 def calculate(data, args):
-    headers = []
-    all_values = []
-    table = []
+    if args.list_format == 'json':
+        all_values = {}
+    else:
+        all_values = []
 
     if args.list_format == 'rows':
         headers = ['stats', 'value']
+    else:
+        headers = []
+
+    table = []
 
     for st_name in args.enabled_stats:
         if args.list_format == 'single':
@@ -105,6 +111,12 @@ def calculate(data, args):
             all_values.append(value)
         elif args.list_format == 'rows':
             table.append([st_name, value])
+        elif args.list_format == 'json':
+            all_values[st_name] = value
+
+    if args.list_format == 'json':
+        print(json.dumps(all_values, sort_keys=True, indent=4))
+        return  # XXX: early exit
 
     if args.list_format == 'single':
         table.append(all_values)
