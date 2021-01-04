@@ -1,0 +1,99 @@
+#!/usr/bin/python3
+
+import numpy as np
+import sys
+import argparse
+from pprint import pprint
+from tabulate import tabulate
+import re
+
+stats_opts = {
+    'count': len,
+    'min': np.amin,
+    'median': np.median,
+    'max': np.amax,
+    'sum': np.sum,
+    'mean': np.mean,
+    'stddev': np.std,
+}
+
+
+def parse_argv():
+    default_enabled_stats = ['count', 'min', 'median', 'max', 'stddev']
+
+    parser = argparse.ArgumentParser(description='Calculate statistics.')
+    def_fmt = '.1f'
+    parser.add_argument(
+        '--format',
+        default=def_fmt,
+        help='float number format; default: {}'.format(def_fmt))
+    parser.add_argument(
+        'enabled_stats',
+        action='append',
+        nargs='*',
+        help='selection of statistics to show; default: "{}"'.format(
+            ' '.join(default_enabled_stats)))
+
+    args = parser.parse_args()
+
+    if args.enabled_stats[0] == []:
+        args.enabled_stats = default_enabled_stats
+    else:
+        args.enabled_stats = args.enabled_stats[0]
+
+    for key in args.enabled_stats:
+        m = re.search(r'^(\d+)%$', key)
+        if m:
+            perc = int(m.group(1))
+            if perc < 0 or perc > 100:
+                parser.error(
+                    '"{}" is not a valid percentile. It must be between 0% and 100%.'
+                    .format(key))
+            continue
+
+        if key not in stats_opts:
+            parser.error(
+                '"{}" is not a valid statistics name. Choose from: {}, {}'.
+                format(key, ', '.join(stats_opts),
+                       '0% to 100% for percentiles'))
+
+    return args
+
+
+def get_stdin_values():
+    data = np.array([])
+    for line in sys.stdin:
+        value = float(line.strip())
+        data = np.append(data, value)
+    return data
+
+
+def calculate(data, args):
+    headers = []
+    all_values = []
+    table = []
+
+    for st_name in args.enabled_stats:
+        headers.append(st_name)
+
+        m = re.search(r'^(\d+)%$', st_name)
+        if m:
+            value = np.percentile(data, int(m.group(1)))
+        else:
+            func = stats_opts[st_name]
+            value = func(data)
+
+        all_values.append(value)
+
+    table.append(all_values)
+
+    print(tabulate(table, headers, tablefmt='simple', floatfmt=args.format))
+
+
+def main():
+    args = parse_argv()
+    data = get_stdin_values()
+    calculate(data, args)
+
+
+main()
