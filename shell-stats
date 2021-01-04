@@ -22,11 +22,24 @@ def parse_argv():
     default_enabled_stats = ['count', 'min', 'median', 'max', 'stddev']
 
     parser = argparse.ArgumentParser(description='Calculate statistics.')
+
+    parser.add_argument('--no-headers',
+                        action='store_true',
+                        help='hide table headers')
+
     def_fmt = '.1f'
     parser.add_argument(
-        '--format',
+        '--num-format',
         default=def_fmt,
         help='float number format; default: {}'.format(def_fmt))
+
+    def_fmt = 'single'
+    parser.add_argument(
+        '--list-format',
+        default=def_fmt,
+        choices=['single', 'rows'],
+        help='results display format; default: {}'.format(def_fmt))
+
     parser.add_argument(
         'enabled_stats',
         action='append',
@@ -73,8 +86,12 @@ def calculate(data, args):
     all_values = []
     table = []
 
+    if args.list_format == 'rows':
+        headers = ['stats', 'value']
+
     for st_name in args.enabled_stats:
-        headers.append(st_name)
+        if args.list_format == 'single':
+            headers.append(st_name)
 
         m = re.search(r'^(\d+)%$', st_name)
         if m:
@@ -83,11 +100,22 @@ def calculate(data, args):
             func = stats_opts[st_name]
             value = func(data)
 
-        all_values.append(value)
+        if args.list_format == 'single':
+            all_values.append(value)
+        elif args.list_format == 'rows':
+            table.append([st_name, value])
 
-    table.append(all_values)
+    if args.list_format == 'single':
+        table.append(all_values)
 
-    print(tabulate(table, headers, tablefmt='simple', floatfmt=args.format))
+    table_type = 'simple'
+    if args.no_headers:
+        headers = []
+        table_type = 'plain'
+
+    print(
+        tabulate(table, headers, tablefmt=table_type,
+                 floatfmt=args.num_format))
 
 
 def main():
