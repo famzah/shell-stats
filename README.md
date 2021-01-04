@@ -8,6 +8,7 @@ This tiny program complements tools like "awk", "sed", etc. which you use in a t
 You have to install the dependencies and then download the script:
 ```bash
 pip3 install tabulate numpy
+
 wget https://raw.githubusercontent.com/famzah/shell-stats/main/shell-stats
 chmod +x shell-stats
 
