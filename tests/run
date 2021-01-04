@@ -1,0 +1,17 @@
+#!/bin/bash
+set -u
+
+for i in {1..4}; do
+	echo "Test #$i"
+	diff -u \
+		"results.$i" \
+		<(cat "numbers.$i" | ../shell-stats --list-format=rows \
+		  count min median max sum mean stddev 0% 1% 20% 25% 50% 66% 95% 99% 100% \
+		)
+	if [ "$?" -ne 0 ]; then
+		echo "Error: Tests failed for case #$i" >&2
+		exit 1
+	fi
+done
+
+echo "All done."
