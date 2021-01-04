@@ -3,6 +3,19 @@ Command-line statistics calculator.
 
 This tiny program complements tools like "awk", "sed", etc. which you use in a terminal console. Inspired by the "[st](https://github.com/nferraz/st)" project.
 
+# Installation
+
+You have to install the dependencies and then download the script:
+```bash
+pip3 install tabulate numpy
+wget https://raw.githubusercontent.com/famzah/shell-stats/main/shell-stats
+chmod +x shell-stats
+
+./shell-stats --help
+```
+
+Optionally, you can move the file `shell-stats` to a directory in your $PATH locations. Traditionally, such directories are `~/bin` or `/usr/local/bin`.
+
 # The problem and its solution by examples
 Occasionally you end up with a list of numbers which you need to statistically analyze. Here is an example:
 ```bash
